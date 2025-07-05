@@ -13,6 +13,7 @@ int main()
     std::cout << std::endl << "Prepare Gameboy" << std::endl <<std::endl;
 
     if(!rom_load("assets/tetris.gb")) {
+        std::cout << "Cannot find game" << std::endl;
         return -1;
     }
 
@@ -33,13 +34,14 @@ int main()
 	printf("CPU OK!\n");
 
 
-	Halib::Clear(Halib::Color(0, 0, 0, true));
+	Halib::Clear(Halib::Color(5, 5, 5, true));
 
     int r=0;
 
 	//This is your game loop. The program should never leave it.
 	while(!Halib::GetShouldClose()) 
 	{
+        std::cout << "cycle" << std::endl;
 		int now;
 		if(!cpu_cycle())
 			break;
