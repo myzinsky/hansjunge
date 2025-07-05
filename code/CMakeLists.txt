@@ -28,6 +28,8 @@ if(NOT DESKTOPBUILD)
   PRIVATE include
   )
 
+  target_compile_definitions(${FINAL_TARGET} PRIVATE WUEHANS)
+
   target_link_libraries(${FINAL_TARGET}
   ${WUEHANS_ROOT}/lib/newlib/libc.a
   ${WUEHANS_ROOT}/lib/newlib/libg.a
@@ -50,7 +52,10 @@ else()
   target_link_libraries(${FINAL_TARGET}
   Halib_Desktop
   )
+
+  target_compile_definitions(${FINAL_TARGET} PRIVATE DESKTOP)
 endif()
+
 
 target_include_directories(${FINAL_TARGET}
   PUBLIC SYSTEM ${WUEHANS_ROOT}/wuehans
