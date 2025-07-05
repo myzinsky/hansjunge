@@ -5,9 +5,11 @@
 #include "mem.h"
 
 #include <Hall/Hall.h>
+#include "Halib/Graphic.h"
 
 #include <assert.h>
 #include <string.h>
+#include <cstdlib>
 
 static int leftover;
 static int lcd_cycles;
@@ -38,8 +40,7 @@ static int window_x, window_y;
 static int bgpalette[] = {0, 3, 3, 3};
 static int sprpalette1[] = {0, 1, 2, 3};
 static int sprpalette2[] = {0, 1, 2, 3};
-//static unsigned long colours[4] = {0xF4FFF4, 0xC0D0C0, 0x80A080, 0x001000};
-static unsigned short colours[4] = {
+static unsigned long colours[4] = {
     0b11101'11111'11101'1,
     0b10111'11001'10111'1,
     0b01111'10011'01111'1,
@@ -160,27 +161,9 @@ void lcd_set_window_x(unsigned char n) {
 	window_x = n;
 }
 
-static void POKE(unsigned int x, int y, unsigned short c)
+static void POKE(unsigned int x, int y, int c)
 {
-	b[(y*4+0)*640 + x*4+0] = c;
-	b[(y*4+0)*640 + x*4+1] = c;
-	b[(y*4+0)*640 + x*4+2] = c;
-	b[(y*4+0)*640 + x*4+3] = c;
-
-	b[(y*4+1)*640 + x*4+0] = c;
-	b[(y*4+1)*640 + x*4+1] = c;
-	b[(y*4+1)*640 + x*4+2] = c;
-	b[(y*4+1)*640 + x*4+3] = c;
-
-	b[(y*4+2)*640 + x*4+0] = c;
-	b[(y*4+2)*640 + x*4+1] = c;
-	b[(y*4+2)*640 + x*4+2] = c;
-	b[(y*4+2)*640 + x*4+3] = c;
-
-	b[(y*4+3)*640 + x*4+0] = c;
-	b[(y*4+3)*640 + x*4+1] = c;
-	b[(y*4+3)*640 + x*4+2] = c;
-	b[(y*4+3)*640 + x*4+3] = c;
+	b[y*160 + x] = c;
 }
 
 static void swap(struct sprite *a, struct sprite *b)
@@ -428,6 +411,7 @@ static void lcd_interrupt(enum LCD_INT src)
 	if(!!irq_level != !!new_level)
 		interrupt(INTR_LCDSTAT);
 }
+#include <cstdio>
 
 int lcd_cycle(void)
 {
@@ -456,25 +440,25 @@ int lcd_cycle(void)
 
 	if(lcd_line == 144 && prev_line == 143)
 	{
-        // TODO hier Tasten verarbeiten
-		//if(sdl_update()) 
-		//	return 0;
+        // Process Keys:
+		if(sdl_update()) 
+			return 0;
 
-        Hall::SetImage((Hall::Color*)b, 160*4, 144*4);
-        Hall::SetExcerpt(0, 0, 160*4, 144*4);
+        // Draw Frame:
+        Hall::SetImage((Hall::Color*)b, 160, 144);
+        Hall::SetExcerpt(0, 0, 160, 144);
         Hall::SetScale(1, 1);
         Hall::SetFlip(false, false);
         Hall::SetColorTable(Hall::NONE);
         Hall::SetColorSource(Hall::MEMORY);
         Hall::SetShape(Hall::RECTANGLE);
         Hall::SetScreenPosition(0, 0);
-
         Hall::Draw();
         #ifdef DESKTOP
-            Hall::UpdateRaylibTexture((Hall::Color*)b, 160*4, 144*4);
+            Hall::UpdateRaylibTexture((Hall::Color*)b, 160, 144);
         #endif
+		Halib::Show();
 
-		//sdl_frame();
 		if(lcd_enabled)
 		{
 			interrupt(INTR_VBLANK);
@@ -493,17 +477,11 @@ int lcd_cycle(void)
 
 int lcd_init(void)
 {
-	//int r;
-	//r = sdl_init();
-	//if(r)
-	//	return 1;
+    b = (unsigned short*)malloc(160*144*sizeof(Hall::Color));
 
-	//b = sdl_get_framebuffer();
-    b = (unsigned short*)malloc(160*144*4*sizeof(Hall::Color));
-
-#ifdef DEBUG
-	lcd_write_control(91);
-#endif
+    #ifdef DEBUG
+        lcd_write_control(91);
+    #endif
 
 	return 1;
 }

@@ -36,6 +36,8 @@ int main()
 
 	Halib::Clear(Halib::Color(5, 5, 5, true));
 
+	lcd_write_control(128);
+
     int r=0;
 
 	//This is your game loop. The program should never leave it.
@@ -63,7 +65,7 @@ int main()
 
 		//Show the changes that you made to the screen
 		//This also blocks until the vsync 
-		Halib::Show();
+		
 	}
 
 out:
