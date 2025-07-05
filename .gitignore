@@ -4,6 +4,7 @@
 tmp/
 
 build/*
+out/*
 !build/build.ninja
 !build/wueHans
 build/wueHans/*
