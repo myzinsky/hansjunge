@@ -250,7 +250,7 @@ int rom_load(const char *filename)
 
 	rom_size = st.st_size;
 
-	bytes = mmap(NULL, rom_size, PROT_READ, MAP_PRIVATE, f, 0);
+	bytes = (unsigned char *)mmap(NULL, rom_size, PROT_READ, MAP_PRIVATE, f, 0);
 	if(!bytes)
 		return 0;
 #endif

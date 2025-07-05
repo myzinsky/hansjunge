@@ -12,3 +12,5 @@ build/wueHans/*
 !build/Desktop
 build/Desktop/*
 !build/Desktop/dummy.txt
+code/assets/SML2.gb
+code/assets/tetris.gb

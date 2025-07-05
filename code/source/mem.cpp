@@ -289,7 +289,7 @@ void mem_init(void)
 {
 	unsigned char *bytes = rom_getbytes();
 
-	mem = calloc(1, 0x10000);
+	mem = (unsigned char*)calloc(1, 0x10000);
 
 	memcpy(&mem[0x0000], &bytes[0x0000], 0x4000);
 	memcpy(&mem[0x4000], &bytes[0x4000], 0x4000);

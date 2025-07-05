@@ -4,6 +4,8 @@
 #include "sdl.h"
 #include "mem.h"
 
+#include <Hall/Hall.h>
+
 #include <assert.h>
 #include <string.h>
 
@@ -116,7 +118,7 @@ void lcd_write_stat(unsigned char c)
 	hblank_int = c&0x08;
 }
 
-static unsigned int *b;
+static unsigned short *b;
 
 void lcd_write_control(unsigned char c)
 {
@@ -448,10 +450,25 @@ int lcd_cycle(void)
 
 	if(lcd_line == 144 && prev_line == 143)
 	{
-		if(sdl_update())
-			return 0;
+        // TODO hier Tasten verarbeiten
+		//if(sdl_update()) 
+		//	return 0;
 
-		sdl_frame();
+        Hall::SetImage((Hall::Color*)b, 160*4, 144*4);
+        Hall::SetExcerpt(0, 0, 160*4, 144*4);
+        Hall::SetScale(1, 1);
+        Hall::SetFlip(false, false);
+        Hall::SetColorTable(Hall::NONE);
+        Hall::SetColorSource(Hall::MEMORY);
+        Hall::SetShape(Hall::RECTANGLE);
+        Hall::SetScreenPosition(0, 0);
+
+        Hall::Draw();
+        #ifdef DESKTOP
+            Hall::UpdateRaylibTexture((Hall::Color*)b, 160*4, 144*4);
+        #endif
+
+		//sdl_frame();
 		if(lcd_enabled)
 		{
 			interrupt(INTR_VBLANK);
@@ -470,17 +487,17 @@ int lcd_cycle(void)
 
 int lcd_init(void)
 {
-	int r;
+	//int r;
+	//r = sdl_init();
+	//if(r)
+	//	return 1;
 
-	r = sdl_init();
-	if(r)
-		return 1;
-
-	b = sdl_get_framebuffer();
+	//b = sdl_get_framebuffer();
+    b = (unsigned short*)malloc(160*144*4*sizeof(Hall::Color));
 
 #ifdef DEBUG
 	lcd_write_control(91);
 #endif
 
-	return 0;
+	return 1;
 }
