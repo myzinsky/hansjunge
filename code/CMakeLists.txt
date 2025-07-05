@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24.0)
 enable_language(C CXX ASM)
-project("Cool game")
+project("HansJunge Emulator")
 
 if(NOT DESKTOPBUILD)
   set(FINAL_TARGET game.elf)
@@ -66,7 +66,15 @@ target_include_directories(${FINAL_TARGET}
 
 target_sources(${FINAL_TARGET} PUBLIC
   # Add your .cpp files here
+  "source/rom.cpp"
   "source/main.cpp"
+  "source/lcd.cpp"
+  "source/mem.cpp"
+  "source/cpu.cpp"
+  "source/timer.cpp"
+  "source/interrupt.cpp"
+  "source/mbc.cpp"
+  "source/sdl.cpp"
 )
 
 # This is stuff for debugging the hardware. Just ignore it :)
