@@ -41,7 +41,6 @@ int main()
 	//This is your game loop. The program should never leave it.
 	while(!Halib::GetShouldClose()) 
 	{
-        std::cout << "cycle" << std::endl;
 		int now;
 		if(!cpu_cycle())
 			break;

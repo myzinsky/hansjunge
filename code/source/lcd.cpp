@@ -38,7 +38,13 @@ static int window_x, window_y;
 static int bgpalette[] = {0, 3, 3, 3};
 static int sprpalette1[] = {0, 1, 2, 3};
 static int sprpalette2[] = {0, 1, 2, 3};
-static unsigned long colours[4] = {0xF4FFF4, 0xC0D0C0, 0x80A080, 0x001000};
+//static unsigned long colours[4] = {0xF4FFF4, 0xC0D0C0, 0x80A080, 0x001000};
+static unsigned short colours[4] = {
+    0b11101'11111'11101'1,
+    0b10111'11001'10111'1,
+    0b01111'10011'01111'1,
+    0b00000'00010'00000'1
+};
 
 struct sprite {
 	int y, x, tile, flags;
@@ -154,7 +160,7 @@ void lcd_set_window_x(unsigned char n) {
 	window_x = n;
 }
 
-static void POKE(unsigned int x, int y, int c)
+static void POKE(unsigned int x, int y, unsigned short c)
 {
 	b[(y*4+0)*640 + x*4+0] = c;
 	b[(y*4+0)*640 + x*4+1] = c;
