@@ -1,5 +1,6 @@
 #ifdef _WIN32
 #include <windows.h>
+#include <sys\types.h>
 #else
 #include <sys/mman.h>
 #include <sys/stat.h>
@@ -14,7 +15,7 @@ unsigned int mapper;
 
 static long rom_size;
 
-static char *carts[] = {
+static const char *carts[] = {
 	[0x00] = "ROM ONLY",
 	[0x01] = "MBC1",
 	[0x02] = "MBC1+RAM",
@@ -46,7 +47,7 @@ static char *carts[] = {
 	[0xFF] = "HuC1+RAM+BATTERY",
 };
 
-static char *banks[] = {
+static const char *banks[] = {
 	" 32KiB",
 	" 64KiB",
 	"128KiB",
@@ -76,7 +77,7 @@ static const int bank_sizes[] = {
 	1536*1024
 };
 
-static char *rams[] = {
+static const char *rams[] = {
 	"None",
 	"  2KiB",
 	"  8KiB",
@@ -84,7 +85,7 @@ static char *rams[] = {
 	"Unknown"
 };
 
-static char *regions[] = {
+static const char *regions[] = {
 	"Japan",
 	"Non-Japan",
 	"Unknown"
@@ -238,7 +239,7 @@ int rom_load(const char *filename)
 	if(!map)
 		return 0;
 
-	bytes = MapViewOfFile(map, FILE_MAP_READ, 0, 0, 0);
+	bytes = (unsigned char*)MapViewOfFile(map, FILE_MAP_READ, 0, 0, 0);
 	if(!bytes)
 		return 0;
 #else

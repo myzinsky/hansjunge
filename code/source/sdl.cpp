@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "cpu.h"
-#include <unistd.h>
+//#include <unistd.h> does not exist on non-UNIX systems
 #include <Hall/Hall.h>
 #include <iostream>
 
