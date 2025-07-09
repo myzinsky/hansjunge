@@ -12,7 +12,7 @@ int main()
 {
     std::cout << std::endl << "Prepare Gameboy" << std::endl <<std::endl;
 
-    if(!rom_load("assets/tetris.gb")) {
+    if(!rom_load("assets/SML2.gb")) {
         std::cout << "Cannot find game" << std::endl;
         return -1;
     }
@@ -20,6 +20,7 @@ int main()
     std::cout << "ROM OK" << std::endl;
 
 	Halib::Init();
+	Halib::SetTargetFramerate(60);
 
     if(!lcd_init()) {
         return -1;
