@@ -16,6 +16,16 @@ set(CXX_STANDARD_REQUIRED ON)
 project("WueHans Template Game")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+if(NOT DESKTOPBUILD)
+  include_directories(
+  SYSTEM ${WUEHANS_ROOT}/system-include/libstdc++
+  SYSTEM ${WUEHANS_ROOT}/system-include/libstdc++/riscv32-unknown-elf
+  SYSTEM ${WUEHANS_ROOT}/system-include
+  SYSTEM ${WUEHANS_ROOT}/lib
+  SYSTEM ${WUEHANS_ROOT}/system-include/newlib # This needs to be after libstdc++ because of include_nexts - JH
+  )
+endif()
+
 include(FetchContent)
 FetchContent_Declare(Halib
     GIT_REPOSITORY https://github.com/byter64/Halib.git

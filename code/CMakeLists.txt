@@ -1,12 +1,15 @@
 cmake_minimum_required(VERSION 3.24.0)
 enable_language(C CXX ASM)
-project("HansJunge Emulator")
+project("Cool game")
 
 if(NOT DESKTOPBUILD)
   set(FINAL_TARGET game.elf)
 else()
   set(FINAL_TARGET game)
 endif()
+
+set(CMAKE_CXX_STANDARD 20)
+set(CXX_STANDARD_REQUIRED ON)
 
 add_executable(${FINAL_TARGET})
 
@@ -16,19 +19,10 @@ add_custom_target(copy_assets
 add_dependencies(${FINAL_TARGET} copy_assets)
 
 
-#libstdc++ is not working properly currently. I would like to try out libc++, 
-#I just need to get it compiled :(
 if(NOT DESKTOPBUILD)
   target_include_directories(${FINAL_TARGET}
-  #PUBLIC SYSTEM ${WUEHANS_ROOT}/system-include/libstdc++
-  #PUBLIC SYSTEM ${WUEHANS_ROOT}/system-include/libstdc++/riscv32-unknown-elf
-  PUBLIC SYSTEM ${WUEHANS_ROOT}/system-include
-  PUBLIC SYSTEM ${WUEHANS_ROOT}/lib
-  PUBLIC SYSTEM ${WUEHANS_ROOT}/system-include/newlib # This needs to be after libstdc++ because of include_nexts - JH
   PRIVATE include
   )
-
-  target_compile_definitions(${FINAL_TARGET} PRIVATE WUEHANS)
 
   target_link_libraries(${FINAL_TARGET}
   ${WUEHANS_ROOT}/lib/newlib/libc.a
@@ -36,8 +30,8 @@ if(NOT DESKTOPBUILD)
   ${WUEHANS_ROOT}/lib/newlib/libgloss.a
   ${WUEHANS_ROOT}/lib/newlib/libm.a
   ${WUEHANS_ROOT}/lib/newlib/libgcc.a
-  #${WUEHANS_ROOT}/lib/libstdc++.a
-  #${WUEHANS_ROOT}/lib/libsupc++.a
+  ${WUEHANS_ROOT}/lib/libstdc++.a
+  ${WUEHANS_ROOT}/lib/libsupc++.a
   fatfs
   Halib
   )
@@ -48,6 +42,8 @@ if(NOT DESKTOPBUILD)
   PUBLIC ${WUEHANS_ROOT}/wuehans/syscall.c
   )
 
+  target_compile_definitions(${FINAL_TARGET} PRIVATE WUEHANS)
+
 else()
   target_link_libraries(${FINAL_TARGET}
   Halib_Desktop
@@ -55,7 +51,6 @@ else()
 
   target_compile_definitions(${FINAL_TARGET} PRIVATE DESKTOP)
 endif()
-
 
 target_include_directories(${FINAL_TARGET}
   PUBLIC SYSTEM ${WUEHANS_ROOT}/wuehans
