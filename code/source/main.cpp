@@ -12,7 +12,7 @@ int main()
 {
     std::cout << std::endl << "Prepare Gameboy" << std::endl <<std::endl;
 
-    if(!rom_load("assets/SML2.gb")) {
+    if(!rom_load("assets/tetris.gb")) {
         std::cout << "Cannot find game" << std::endl;
         return -1;
     }
@@ -36,6 +36,9 @@ int main()
 
 
 	Halib::Clear(Halib::Color(5, 5, 5, true));
+	Halib::Show();
+	Halib::Clear(Halib::Color(5, 5, 5, true));
+	Halib::Show();
 
 	lcd_write_control(128);
 
