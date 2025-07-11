@@ -9,7 +9,7 @@ add_compile_options(-nostdlib
 	                  -fno-unwind-tables
 	                  -fno-rtti
 	                  -march=rv32im
-	                  -Os #this could be changed to O3 in general
+	                  -O3 #this could be changed to O3 in general
 	                  -ffreestanding
 	                  -Bstatic
 	                  -nostdinc
