@@ -2,12 +2,13 @@
 #include <windows.h>
 #include <sys\types.h>
 #else
-#include <sys/mman.h>
-#include <sys/stat.h>
+//#include <sys/mman.h>
+//#include <sys/stat.h>
 #include <fcntl.h>
 #endif
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "rom.h"
 
 unsigned char *bytes;
@@ -220,7 +221,7 @@ int rom_load(const char *filename)
 #ifdef _WIN32
 	HANDLE f, map;
 #else
-	int f;
+	FILE* f;
 	struct stat st;
 #endif
 	unsigned char *bytes;
@@ -243,17 +244,20 @@ int rom_load(const char *filename)
 	if(!bytes)
 		return 0;
 #else
-	f = open(filename, O_RDONLY);
-	if(f == -1)
+	f = fopen(filename, "rb");
+	if(f == NULL)
 		return 0;
-	if(fstat(f, &st) == -1)
-		return 0;
+	//if(fstat(f, &st) == -1)
+//		return 0;
+	fseek(f, 0, SEEK_END);
+	rom_size = ftell(f);
 
-	rom_size = st.st_size;
-
-	bytes = (unsigned char *)mmap(NULL, rom_size, PROT_READ, MAP_PRIVATE, f, 0);
+	//bytes = (unsigned char *)mmap(NULL, rom_size, PROT_READ, MAP_PRIVATE, f, 0);
+	bytes = (unsigned char*)malloc(rom_size);
 	if(!bytes)
-		return 0;
+	return 0;
+	fseek(f, 0, SEEK_SET);
+	fread(bytes, rom_size, 1, f);
 #endif
 	return rom_init(bytes, rom_size);
 }
