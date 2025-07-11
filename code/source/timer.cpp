@@ -122,7 +122,7 @@ static void timer_tick(int delta)
 
 		old_ticks = ticks;
 		/* Our CPU runs at 1MHz, timer is 4MHz */
-		ticks += 4;
+		ticks += 50;
 
 		if(!started)
 			continue;

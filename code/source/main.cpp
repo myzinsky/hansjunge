@@ -44,32 +44,9 @@ int main()
 	//This is your game loop. The program should never leave it.
 	while(!Halib::GetShouldClose()) 
 	{
-		int now;
-		if(!cpu_cycle())
-			break;
-		now = cpu_get_cycles();
-
-		while(now != r)
-		{
-			int i;
-
-			for(i = 0; i < 4; i++)
-				if(!lcd_cycle())
-					goto out;
-
-			r++;
-		}
-
-		timer_cycle();
-
-		r = now;
-
-		//Show the changes that you made to the screen
-		//This also blocks until the vsync 
-		
+		cpu_cycle();
+		lcd_cycle();
 	}
-
-out:
 	
 	return 0;
 }
