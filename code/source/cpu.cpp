@@ -863,11 +863,11 @@ int cpu_cycle(void)
 	}
 
 	/* If the cpu is halted, do nothing instead */
-	if(halted)
+	/*if(halted)
 	{
 		c.cycles += 1;
 		return 1;
-	}
+	}*/
 
 #ifdef DEBUG
 	if(c.PC == 0x100)

@@ -300,11 +300,12 @@ static void lcd_do_line(int line, int cycle)
 	static int line_fill, fetch_delay, window_lines, window_used_line, window_used_frame;
 	static unsigned char scx_low_latch;
 
+	/*
 	if(fetch_delay)
 	{
 		fetch_delay--;
 		return;
-	}
+	}*/
 
 	if(line >= 144)
 	{
@@ -314,21 +315,22 @@ static void lcd_do_line(int line, int cycle)
 		return;
 	}
 
-	if(lcd_mode != 2 && cycle < 80)
+	if(lcd_mode != 2 /*&& cycle < 80*/)
 	{
 		lcd_mode = 2;
 	}
 	else
-		if(lcd_mode == 2 && cycle >= 80)
+		if(lcd_mode == 2 /*&& cycle >= 80*/)
 		{
 			scx_low_latch = scroll_x & 7;
 			sprite_fetch(line, o);
 			lcd_mode = 3;
 		}
 
+		/*
 	if(cycle < 93)
 		return;
-
+*/
 	if(lcd_mode == 3)
 	{
 		struct oam_cache *oc;
