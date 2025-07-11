@@ -32,11 +32,11 @@ FetchContent_Declare(Halib
     GIT_TAG main
     #GIT_TAG develop #For the devs only :)
 )
+FetchContent_MakeAvailable(Halib)
 
 if(NOT DESKTOPBUILD)
 	add_subdirectory(lib)
 endif()
-FetchContent_MakeAvailable(Halib)
 
 if(NOT DESKTOPBUILD)
 	add_compile_options(
@@ -46,7 +46,7 @@ if(NOT DESKTOPBUILD)
 	  -fno-rtti
 	  -march=rv32im
 	  -Os
-	  -ffreestanding
+	  #-ffreestanding  #Because we use libstdc++, we need to pretend that we are in a hosted environment so that gcc gives us all features of libstdc++
 	  -Bstatic
 	  -nostdinc
 	  -fno-builtin
