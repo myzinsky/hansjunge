@@ -254,6 +254,7 @@ int rom_load(const char *filename)
 
 	//bytes = (unsigned char *)mmap(NULL, rom_size, PROT_READ, MAP_PRIVATE, f, 0);
 	bytes = (unsigned char*)malloc(rom_size);
+	printf("rom_size is: %i\n", rom_size);
 	if(!bytes)
 	return 0;
 	fseek(f, 0, SEEK_SET);
