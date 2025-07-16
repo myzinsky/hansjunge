@@ -8,6 +8,8 @@
 #include "cpu.h"
 #include "timer.h"
 
+void Halib::DrawUI() {}
+
 int main() 
 {
     std::cout << std::endl << "Prepare Gameboy" << std::endl <<std::endl;
@@ -41,6 +43,7 @@ int main()
 	Halib::Show();
 
 	lcd_write_control(128);
+	Halib::SetVSynchronization(false);
 
     int r=0;
 
