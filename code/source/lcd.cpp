@@ -414,6 +414,8 @@ static void lcd_interrupt(enum LCD_INT src)
 		interrupt(INTR_LCDSTAT);
 }
 #include <cstdio>
+void OnVSync();
+extern Halib::Color backgroundColor;
 
 int lcd_cycle(void)
 {
@@ -446,9 +448,11 @@ int lcd_cycle(void)
 		if(sdl_update()) 
 			return 0;
 
+		Halib::Clear(backgroundColor);
+		while(Hall::GetIsGPUBusy());
         // Draw Frame:
         Hall::SetImage((Hall::Color*)b, 160, 144);
-        Hall::SetExcerpt(0, 0, 80, 144);
+        Hall::SetExcerpt(0, 0, 160, 144);
         Hall::SetScale(1, 1);
         Hall::SetFlip(false, false);
         Hall::SetColorTable(Hall::NONE);
@@ -459,6 +463,9 @@ int lcd_cycle(void)
         #ifdef DESKTOP
             Hall::UpdateRaylibTexture((Hall::Color*)b, 160, 144);
         #endif
+
+		OnVSync();
+
 		Halib::Show();
 
 		if(lcd_enabled)

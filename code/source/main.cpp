@@ -10,6 +10,28 @@
 
 void Halib::DrawUI() {}
 
+float cpuTime = -1, lcdTime = -1;
+Halib::Color backgroundColor = Halib::Color(10, 10, 10, true);
+void OnVSync()
+{
+	char buffer[64];
+
+	sprintf(buffer, "cpu: %.3f s", cpuTime);
+	Halib::DrawText(buffer, 300, 10);
+
+	sprintf(buffer, "lcd: %.3f s", lcdTime);
+	Halib::DrawText(buffer, 300, 20);
+
+	float newTime = Halib::GetTimeSinceStartup();
+	sprintf(buffer, "tot: %.3f s", newTime - cpuTime);
+	cpuTime = newTime;
+	Halib::DrawText(buffer, 300, 40);
+
+	//cpuTime = 0;
+	//lcdTime = 0;
+}
+
+
 int main() 
 {
     std::cout << std::endl << "Prepare Gameboy" << std::endl <<std::endl;
@@ -37,9 +59,9 @@ int main()
 	printf("CPU OK!\n");
 
 
-	Halib::Clear(Halib::Color(5, 5, 5, true));
+	Halib::Clear(backgroundColor);
 	Halib::Show();
-	Halib::Clear(Halib::Color(5, 5, 5, true));
+	Halib::Clear(backgroundColor);
 	Halib::Show();
 
 	lcd_write_control(128);
@@ -47,11 +69,21 @@ int main()
 
     int r=0;
 
+	float oldTime = Halib::GetTimeSinceStartup();
+	float time;
 	//This is your game loop. The program should never leave it.
 	while(!Halib::GetShouldClose()) 
 	{
 		cpu_cycle();
+		/*time = Halib::GetTimeSinceStartup();
+		float delta = time - oldTime;
+		cpuTime += delta;
+		oldTime = time;*/
 		lcd_cycle();
+		/*time = Halib::GetTimeSinceStartup();
+		delta = time - oldTime;
+		lcdTime += delta;
+		oldTime = time;*/
 	}
 	
 	return 0;
