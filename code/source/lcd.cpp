@@ -300,12 +300,11 @@ static void lcd_do_line(int line, int cycle)
 	static int line_fill, fetch_delay, window_lines, window_used_line, window_used_frame;
 	static unsigned char scx_low_latch;
 
-	/*
 	if(fetch_delay)
 	{
 		fetch_delay--;
 		return;
-	}*/
+	}
 
 	if(line >= 144)
 	{
@@ -315,22 +314,21 @@ static void lcd_do_line(int line, int cycle)
 		return;
 	}
 
-	if(lcd_mode != 2 /*&& cycle < 80*/)
+	if(lcd_mode != 2 && cycle < 80)
 	{
 		lcd_mode = 2;
 	}
 	else
-		if(lcd_mode == 2 /*&& cycle >= 80*/)
+		if(lcd_mode == 2 && cycle >= 80)
 		{
 			scx_low_latch = scroll_x & 7;
 			sprite_fetch(line, o);
 			lcd_mode = 3;
 		}
 
-		/*
 	if(cycle < 93)
 		return;
-*/
+
 	if(lcd_mode == 3)
 	{
 		struct oam_cache *oc;
@@ -414,8 +412,6 @@ static void lcd_interrupt(enum LCD_INT src)
 		interrupt(INTR_LCDSTAT);
 }
 #include <cstdio>
-void OnVSync();
-extern Halib::Color backgroundColor;
 
 int lcd_cycle(void)
 {
@@ -448,8 +444,6 @@ int lcd_cycle(void)
 		if(sdl_update()) 
 			return 0;
 
-		Halib::Clear(backgroundColor);
-		while(Hall::GetIsGPUBusy());
         // Draw Frame:
         Hall::SetImage((Hall::Color*)b, 160, 144);
         Hall::SetExcerpt(0, 0, 160, 144);
@@ -463,9 +457,6 @@ int lcd_cycle(void)
         #ifdef DESKTOP
             Hall::UpdateRaylibTexture((Hall::Color*)b, 160, 144);
         #endif
-
-		OnVSync();
-
 		Halib::Show();
 
 		if(lcd_enabled)

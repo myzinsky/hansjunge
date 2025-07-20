@@ -16,19 +16,10 @@ void OnVSync()
 {
 	char buffer[64];
 
-	sprintf(buffer, "cpu: %.3f s", cpuTime);
-	Halib::DrawText(buffer, 300, 10);
-
-	sprintf(buffer, "lcd: %.3f s", lcdTime);
-	Halib::DrawText(buffer, 300, 20);
-
 	float newTime = Halib::GetTimeSinceStartup();
-	sprintf(buffer, "tot: %.3f s", newTime - cpuTime);
+	sprintf(buffer, "Time per frame: %.3f s", newTime - cpuTime);
 	cpuTime = newTime;
 	Halib::DrawText(buffer, 300, 40);
-
-	//cpuTime = 0;
-	//lcdTime = 0;
 }
 
 
@@ -64,26 +55,16 @@ int main()
 	Halib::Clear(backgroundColor);
 	Halib::Show();
 
-	lcd_write_control(128);
+	//lcd_write_control(128);
 	Halib::SetVSynchronization(false);
-
-    int r=0;
 
 	float oldTime = Halib::GetTimeSinceStartup();
 	float time;
-	//This is your game loop. The program should never leave it.
+	
 	while(!Halib::GetShouldClose()) 
 	{
 		cpu_cycle();
-		/*time = Halib::GetTimeSinceStartup();
-		float delta = time - oldTime;
-		cpuTime += delta;
-		oldTime = time;*/
 		lcd_cycle();
-		/*time = Halib::GetTimeSinceStartup();
-		delta = time - oldTime;
-		lcdTime += delta;
-		oldTime = time;*/
 	}
 	
 	return 0;
