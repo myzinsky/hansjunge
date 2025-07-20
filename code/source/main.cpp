@@ -14,9 +14,10 @@ float cpuTime = -1, lcdTime = -1;
 Halib::Color backgroundColor = Halib::Color(10, 10, 10, true);
 void OnVSync()
 {
-	char buffer[64];
-
+	Halib::Draw(Halib::Rectangle{300, 40, 99, 20}, Halib::VecI2(0, 0), backgroundColor);
+	
 	float newTime = Halib::GetTimeSinceStartup();
+	char buffer[64];
 	sprintf(buffer, "Time per frame: %.3f s", newTime - cpuTime);
 	cpuTime = newTime;
 	Halib::DrawText(buffer, 300, 40);
@@ -55,7 +56,6 @@ int main()
 	Halib::Clear(backgroundColor);
 	Halib::Show();
 
-	//lcd_write_control(128);
 	Halib::SetVSynchronization(false);
 
 	float oldTime = Halib::GetTimeSinceStartup();

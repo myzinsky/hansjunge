@@ -40,7 +40,7 @@ static int window_x, window_y;
 static int bgpalette[] = {0, 3, 3, 3};
 static int sprpalette1[] = {0, 1, 2, 3};
 static int sprpalette2[] = {0, 1, 2, 3};
-static unsigned long colours[4] = {
+static unsigned short colours[4] = {
     0b11101'11111'11101'1,
     0b10111'11001'10111'1,
     0b01111'10011'01111'1,
@@ -412,6 +412,8 @@ static void lcd_interrupt(enum LCD_INT src)
 		interrupt(INTR_LCDSTAT);
 }
 #include <cstdio>
+void OnVSync();
+extern Halib::Color backgroundColor;
 
 int lcd_cycle(void)
 {
@@ -446,7 +448,7 @@ int lcd_cycle(void)
 
         // Draw Frame:
         Hall::SetImage((Hall::Color*)b, 160, 144);
-        Hall::SetExcerpt(0, 0, 160, 144);
+        Hall::SetExcerpt(0, 0, 80, 144);
         Hall::SetScale(1, 1);
         Hall::SetFlip(false, false);
         Hall::SetColorTable(Hall::NONE);
@@ -457,6 +459,9 @@ int lcd_cycle(void)
         #ifdef DESKTOP
             Hall::UpdateRaylibTexture((Hall::Color*)b, 160, 144);
         #endif
+
+		OnVSync();
+
 		Halib::Show();
 
 		if(lcd_enabled)
